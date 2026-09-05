@@ -1,72 +1,68 @@
 # Portfolio — Oleksii Kobzar
 
-Backend & Android developer from Chernihiv, Ukraine. Seven years of hands-on work
-with networks and technical support at the telecom company Osnova; alongside that
-I ship my own products to real users — from Kotlin apps in production to async
-FastAPI backends and full Next.js web apps.
+Developer from Chernihiv, Ukraine. Seven years working with networks and tech
+support at the telecom company Osnova — real hardware, real outages, and users who
+don't speak the technical language. Alongside that I write code and get my own things
+in front of real users instead of leaving them in a drafts folder.
 
-These are projects I designed and built myself: backend, client, database,
-deployment. Below is what each one does, how it works inside, and what it is built
-with. The source lives in private repositories; here you get the description and
-the screenshots.
+Seven projects here, each one built end to end by me: backend, client, database,
+deployment. The source is in private repos — below is what came out of them, with
+screenshots.
 
-🇺🇦 Українська версія: [README.md](README.md)
+🇺🇦 [Українська версія](README.md)
 
 ---
 
-## Projects
+## What's here
 
-| Project | What it is | Stack |
+| Project | In short | Built with |
 |---|---|---|
-| [HelpLoop](#helploop) | Q&A community for IT people, in production | Next.js 15, React 19, TypeScript, PostgreSQL, Prisma |
-| [FOP Finance](#fop-finance) | Finance app for sole proprietors, on Google Play | Kotlin, Jetpack Compose, Room, Play Billing |
-| [Osnova TV](#osnova-tv) | IPTV client with its own update channel | Kotlin, Compose, libVLC, FCM + Python backend |
-| [Tabel](#tabel) | Shift schedule and payroll | Kotlin, Compose, Glance widget |
-| [fb2 Home Library](#fb2-home-library) | Book catalog + Telegram Mini App | Python, FastAPI, aiogram, SQLite |
-| [SQLi Scanner](#sqli-scanner) | SQL-injection testing for your own sites | Python (stdlib), Telegram bot |
-| [Upwork Copilot](#upwork-copilot) | Upwork job scoring and triage | Python, IMAP, feedparser |
-| [Résumé site](#résumé-site) | Personal page, UA/EN | HTML, CSS, JS |
+| [HelpLoop](#helploop) | Q&A community for IT people, live | Next.js 15, React 19, TypeScript, PostgreSQL |
+| [FOP Finance](#fop-finance) | Finance app for sole proprietors, on Google Play | Kotlin, Compose, Room |
+| [Osnova TV](#osnova-tv) | Cable operator client + IPTV | Kotlin, Compose, libVLC + Python |
+| [Tabel](#tabel) | Shift schedule and pay from a Google Sheet | Kotlin, Compose, Glance |
+| [fb2 library](#fb2-library) | Book catalog + Telegram Mini App | Python, FastAPI, aiogram |
+| [SQLi scanner](#sqli-scanner) | Test your own sites for injection | Python, stdlib only |
+| [Upwork Copilot](#upwork-copilot) | Upwork job scoring | Python, IMAP |
 
 ---
 
 ## HelpLoop
 
-A Q&A community for IT people: ask what you are stuck on, answer what you have
-already solved. Ukrainian interface, English codebase. In production.
+A place where IT people help each other out: you ask what you're stuck on, you
+answer the thing you once untangled yourself. Ukrainian interface, English code.
+Live and running.
 
 | | | |
 |---|---|---|
 | ![Home](assets/helploop/home.png) | ![Sign in](assets/helploop/login.png) | ![Updates](assets/helploop/updates.png) |
 
-**What it does.** Questions and answers with markdown, syntax highlighting, tags,
-comments, voting, accepted answers and a reputation ledger. Accounts with email
-confirmation, password reset, session management and self-service deletion.
-Full-text search on a PostgreSQL index. Moderation: report queue, close/reopen,
-soft delete with restore, account suspension. An `/admin` panel for users,
-content, tags and an append-only audit log.
+Questions and answers with markdown and code highlighting, tags, comments, voting,
+accepted answers, reputation. Accounts with email confirmation and password reset,
+moderation with a report queue and soft delete, and a separate `/admin` panel where
+everything is done by hand and every action lands in a log you can't rewrite.
 
-**How it works.** Next.js 15 with the App Router: pages render on the server and,
-instead of a separate API, it uses server actions. Auth is hand-rolled — opaque
-server-side sessions revocable in one `DELETE`, with no dependency on a beta auth
-library. Passwords use `scrypt` from Node's standard library (memory-hard, and no
-native module to break the Alpine/Windows build split). Anti-bot is a self-hosted
-Altcha proof of work — no third party, no tracking. Search runs on a `simple`
-dictionary index: Postgres ships no Ukrainian stemmer, and the English one
-produces wrong matches in both directions.
+Built on Next.js 15 with the App Router: pages assemble on the server, and instead of
+a separate API it uses server actions. I wrote the auth myself — server sessions you
+kill with a single query, no beta library to get tied to. Passwords run on `scrypt`
+from Node's standard library, so there's no native module to break the Alpine/Windows
+build. Anti-bot is my own Altcha instead of a captcha, no third parties. Search had to
+go on Postgres's `simple` dictionary: there's no Ukrainian stemmer, and the English
+one mangles Ukrainian words both ways.
 
-**Stack.** Next.js 15 (App Router), React 19, TypeScript (strict), PostgreSQL 16
-+ Prisma, Tailwind CSS v4, remark/rehype for markdown, highlight.js, zod, sharp,
-Resend (email over HTTP API), Caddy, Docker Compose.
+**Stack:** Next.js 15, React 19, TypeScript, PostgreSQL + Prisma, Tailwind v4,
+remark/rehype, Resend, Caddy, Docker Compose.
 
 ---
 
 ## FOP Finance
 
-An offline finance app for Ukrainian sole proprietors and small companies: income
-and expenses, taxes across seven tax regimes, profitability analytics, a hiring
-calculator and a payment calendar. Shipped on Google Play with in-app purchases.
+Counts a Ukrainian sole proprietor's money: income and expenses, taxes across seven
+regimes, profitability, hiring, a payment calendar. On Google Play. It grew out of one
+question the ready-made accounting services won't answer: how much will you actually
+keep after tax if you hire one more person.
 
-| Overview | Analytics | Hiring calculator |
+| Overview | Analytics | Hiring |
 |---|---|---|
 | ![Overview](assets/fop-finance/dashboard.png) | ![Analytics](assets/fop-finance/analytics.png) | ![Hiring](assets/fop-finance/hiring.png) |
 
@@ -74,70 +70,60 @@ calculator and a payment calendar. Shipped on Google Play with in-app purchases.
 |---|---|
 | ![Calendar](assets/fop-finance/calendar.png) | ![Comparison](assets/fop-finance/comparison.png) |
 
-**What it does.** Income and expenses with categories, foreign-currency operations
-with an automatic NBU exchange rate for the date, recurring templates. Accounts
-with balances, clients and invoices with PDF, a quarterly income ledger. Seven tax
-regimes, each with its own payment schedule, limits and over-limit warnings.
-Analytics: margin, profitability, break-even point, cash-flow forecast, comparison
-against the industry. A hiring calculator (staff / Diia.City / contractor) and a
-calendar of payment due dates.
+Currency operations pull the NBU rate for the date on their own; recurring payments
+fill themselves in every month. Seven tax regimes, each with its own schedule, limits
+and over-limit warnings. The analytics work out margin, break-even, a cash-flow
+forecast, and compare you against the industry. The hiring calculator shows which is
+cheaper — staff, Diia.City, or a contractor — for the same net pay. The calendar holds
+the due dates for your regime.
 
-**How it works.** Local-first by design: every financial record stays in an
-on-device database and never leaves it — no server means nothing to leak. The only
-network call is the NBU rate for the date of a currency operation. Sign-in is
-protected by biometrics and an access code stored only as an irreversible hash.
-Recurring payments and reminders run in the background on WorkManager.
+The whole database sits on the phone and goes nowhere. No server means nothing to
+leak. The one time the app touches the network is for the NBU rate. Sign-in is
+biometrics or a code stored only as a hash, with no way back to the code itself.
 
-**Stack.** Kotlin, Jetpack Compose (Material 3), Navigation Compose, Room,
-WorkManager, AndroidX Biometric, DocumentFile, Google Play Billing, AdMob +
-User Messaging Platform (ad consent).
+**Stack:** Kotlin, Jetpack Compose, Room, WorkManager, Biometric, Google Play Billing,
+AdMob.
 
 ---
 
 ## Osnova TV
 
-An Android client for a cable operator's subscribers: personal account, payment,
-IPTV. Distributed as its own APK with a separate update channel — no Google Play.
+An app for a cable operator's subscribers: account, balance, payment, IPTV. It's not
+on Google Play — it ships as its own APK.
 
-| Sign in | Account | Payment history |
+| Sign in | Account | Payments |
 |---|---|---|
-| ![Sign in](assets/osnova-tv/login.png) | ![Account](assets/osnova-tv/account.png) | ![Payment history](assets/osnova-tv/finance.png) |
+| ![Sign in](assets/osnova-tv/login.png) | ![Account](assets/osnova-tv/account.png) | ![Payments](assets/osnova-tv/finance.png) |
 
-| Tariffs | IPTV | Extra services |
+| Tariffs | IPTV | Services |
 |---|---|---|
-| ![Tariffs](assets/osnova-tv/tariffs.png) | ![IPTV](assets/osnova-tv/iptv.png) | ![Extra](assets/osnova-tv/extra.png) |
+| ![Tariffs](assets/osnova-tv/tariffs.png) | ![IPTV](assets/osnova-tv/iptv.png) | ![Services](assets/osnova-tv/extra.png) |
 
-> On the account screen the account number, full name, login, address and IP are
-> blurred — this is a real subscriber's data.
+> On the account screen the account number, name, login, address and IP are blurred —
+> this is a real subscriber's data.
 
-**What it does.** Sign-in to the personal account, balance and tariffs, IPTV
-channels with an electronic program guide, and account-balance reminders. The app
-reads the account data off the operator's web page, parsing the HTML — the operator
-exposes no API.
+The operator gives no API, so the app pulls the account straight off their web page —
+it parses the HTML with jsoup. The playlist and program guide come in as M3U and
+XMLTV, and libVLC plays the channels. Push runs through Firebase, with the token kept
+encrypted.
 
-**How it works.** The Compose client parses the personal account with jsoup, pulls
-the playlist (M3U) and the program guide (XMLTV), and plays the streams through
-libVLC. Firebase Cloud Messaging handles notifications; the token is stored
-encrypted (EncryptedSharedPreferences). A separate Python backend (aiohttp +
-aiogram) receives device registrations, sends push through firebase-admin and
-serves the APK. There are no Google Play auto-updates, so the update channel is
-custom: `version.json` returns the version and a link, and the app verifies the
-downloaded APK against a SHA-256 checksum before installing — so a tampered file
-cannot be slipped in.
+Behind it is a Python backend (aiohttp + aiogram) that takes device registrations,
+sends push and serves the APK. There are no Google Play updates, so the channel is my
+own: `version.json` says which version is current, and the app checks the downloaded
+file against a SHA-256 before installing — so nothing else can arrive in place of an
+update.
 
-**Stack.** Kotlin, Jetpack Compose (Material 3), jsoup, OkHttp, libVLC
-(`org.videolan.android:libvlc-all`), Firebase Cloud Messaging, AndroidX
-Security-Crypto, Biometric, WorkManager. Backend: Python, aiohttp, aiogram,
-firebase-admin, SQLite, Caddy.
+**Stack:** Kotlin, Compose, jsoup, OkHttp, libVLC, Firebase Cloud Messaging,
+Security-Crypto. Backend — Python, aiohttp, aiogram, SQLite, Caddy.
 
 ---
 
 ## Tabel
 
-An Android app that reads a work schedule from a Google Sheet and shows who is on
-shift with you on a given day, and computes the month's pay. Built for a specific
-rotation: 24-hour shifts every third day, the rest of the team on floating 8- and
-11-hour shifts.
+Reads a work timesheet from a Google Sheet and shows who's on shift with you that day
+and what the month's pay comes to. I wrote it for the exact rotation at my job:
+24-hour shifts every third day, the rest of the team on floating 8- and 11-hour
+shifts.
 
 | Shift | Month | People |
 |---|---|---|
@@ -147,118 +133,87 @@ rotation: 24-hour shifts every third day, the rest of the team on floating 8- an
 |---|---|
 | ![Totals](assets/tabel/totals.png) | ![Payroll](assets/tabel/salary.png) |
 
-> Coworkers' surnames and the amounts in the screenshots are blurred — this is real
-> data from the sheet.
+> Coworkers' surnames and the amounts are blurred — real data from the sheet.
 
-**What it does.** For a chosen date it shows your status and everyone working that
-day, grouped by shift type. A calendar of the schedule with a monthly summary. The
-team list browsable by month, with a forecast for months not yet in the sheet.
-Totals for the year and for all time: hours, 24-hour shifts, days off, who you
-share shifts with most. Payroll with the formula explained and a 12-month history.
-Notifications on shift days and a home-screen widget with today's status.
+For any date it shows your status and everyone working that day, grouped by shift type.
+There's a month calendar, the team list, totals for the year and for all time — hours,
+24-hour shifts, who you overlap with most. Pay is worked out with the formula spelled
+out and a 12-month history. For months not yet in the sheet, the roster and shifts are
+forecast from the rotation. A home-screen widget keeps today's status in view.
 
-**How it works.** The data source is the timesheet Google Sheet; the app reads it
-and lays out the "24h every third day" rotation. For future months not yet in the
-sheet, the roster and shifts are forecast from the rotation. The home-screen widget
-is built on Glance. Notifications run on WorkManager.
+No backend — the app reads the sheet directly.
 
-**Stack.** Kotlin, Jetpack Compose (Material 3), Glance (widget), WorkManager,
-Lifecycle ViewModel. No backend — it reads the sheet directly.
+**Stack:** Kotlin, Compose, Glance (widget), WorkManager.
 
 ---
 
-## fb2 Home Library
+## fb2 library
 
-Catalogs a local folder of books, works out series and volume versions on its own,
-and packs archives. Managed through a Telegram Mini App, a bot, or a CLI. The data
-source is only your files on disk — nothing is downloaded anywhere.
+Sorts out a folder of books: it works out on its own which series a file belongs to and
+which copy of a volume is newer, and packs archives from that. You can drive it from a
+Telegram Mini App, a bot, or the console. It downloads nothing — it works only with the
+files you already have.
 
-| Mini App | CLI |
+| Mini App | Console |
 |---|---|
 | ![Mini App](assets/bookshelf/miniapp.png) | ![CLI](assets/bookshelf/cli.png) |
 
-**What it does.** Reads metadata from the fb2 files themselves (author, series,
-volume number, annotation, cover), transparently unpacking `.fb2.zip`. Merges
-series broken apart by messy data. From several copies of one volume it keeps the
-current one — by date and size — and marks the rest stale without deleting them.
-Shows gaps in numbering. Packs a ZIP of the whole library, a series or an author,
-splitting it under Telegram's file limit.
+It reads metadata from the fb2 files, unpacking `.fb2.zip` transparently. It merges
+series split apart by inconsistent naming. Out of several copies of one volume it keeps
+the current one — by date and size — and leaves the rest alone, just marked stale. It
+shows which volumes a series is missing. It packs a ZIP of the whole library, a series
+or an author, and slices it under Telegram's size limit.
 
-**How it works.** The core is a Python library with a CLI (`scan`, `stats`,
-`series`, `duplicates`, `pack`). A repeat `scan` re-reads only changed files. On
-top of it sit a Telegram bot on aiogram and a web app (Mini App) on FastAPI, both
-working against the same catalog. Metadata is cached in SQLite.
+The core is a Python library with console commands; a repeat scan only re-reads what
+changed. On top sit a bot on aiogram and a Mini App on FastAPI, both hitting the same
+catalog, with metadata cached in SQLite.
 
-**Stack.** Python, FastAPI + uvicorn (Mini App), aiogram (bot), SQLite, a custom
-fb2/`.fb2.zip` parser.
+**Stack:** Python, FastAPI, aiogram, SQLite, a custom fb2 parser.
 
 ---
 
-## SQLi Scanner
+## SQLi scanner
 
-A toolkit for a site owner to test their own resources for SQL injection and
-understand how to fix it. Deliberately fenced: your own sites only, or with written
-permission.
+So a site owner can check their own pages for SQL injection and see how to patch it.
+Kept narrow on purpose: your own sites only, or ones you have permission for.
 
-| HTML report |
+| Report |
 |---|
 | ![Report](assets/sqli-scanner/report.png) |
 
-**What it does.** Detects SQL injection of three kinds: error-based (from a database
-error appearing), boolean-based blind (from the difference between responses to a
-true and a false expression) and time-based blind (from an injected delay). It
-tests different vectors — URL parameters, form fields, headers, cookies, path.
-It identifies the DBMS (MySQL/MariaDB, PostgreSQL, MS SQL, Oracle, SQLite) and
-tailors payloads to it. Reports in HTML and JSON. A separate `REMEDIATION.md`
-explains how to close each hole, with code examples in Java, PHP and Node.js.
+It catches three kinds of injection: when a database error falls into the response,
+when the site answers a true and a false expression differently, and when it gives
+itself away with an injected delay. It probes URL parameters, form fields, headers,
+cookies and the path. It recognizes the DBMS — MySQL, PostgreSQL, MS SQL, Oracle,
+SQLite — and picks payloads to match. Reports go to HTML and JSON, and next to them a
+`REMEDIATION.md` shows how to close the hole in Java, PHP and Node.
 
-**How it works.** Pure Python 3 with no external dependencies — the standard
-library is enough. It ships a deliberately vulnerable mini-site to prove the
-scanner works. Runs from a CLI, an auto-launch menu script, or a Telegram bot. A
-"smart engine" tells a real DBMS error in the response apart from ordinary text.
+Written in plain Python 3, no external dependency at all. It ships a deliberately
+broken little site to prove the scanner actually finds something. You can run it from
+the console, through a menu, or from a Telegram bot.
 
-**Stack.** Python 3 (stdlib only), a Telegram bot on the raw Bot API.
+**Stack:** Python 3 (stdlib only), a Telegram bot on the raw Bot API.
 
 ---
 
 ## Upwork Copilot
 
-A set of Python scripts to find, score and triage Upwork jobs for a Python /
-automation / API stack. Collects jobs, scores relevance and drafts cover letters.
+A set of scripts so I don't scroll Upwork by hand: it collects jobs, scores how much
+they're mine, and drafts cover letters for them. Tuned for Python, automation and APIs.
 
-| CLI |
+| Console |
 |---|
 | ![CLI](assets/upwork-copilot/cli.png) |
 
-**What it does.** Collects jobs from Upwork email alerts (over IMAP), from local
-files, and through a Telegram bot. Computes a 1–10 match score against your
-keywords, with a breakdown of where the score comes from. Catches red flags (unpaid
-tests, unrealistic budgets) and off-stack work. Stores everything in JSON or SQLite.
-Generates a personalized cover letter per job on a Hook → Solution → CTA structure.
-Works both through CLI commands and an interactive menu.
+It pulls jobs from Upwork email alerts over IMAP, from local files, and through a
+Telegram bot. Each one gets a score from 1 to 10, with the reason for it shown. It
+filters out red flags — unpaid tests, unrealistic budgets, off-stack work. For a given
+job it drafts a letter on a hook → solution → call-to-action shape. Everything is
+stored in JSON or SQLite, and it runs both by commands and through a menu.
 
-**How it works.** The core is pure Python 3.8+ — without dependencies it falls back
-to `urllib` + `xml.etree`; `feedparser` and `requests` make feed handling more
-robust but are optional. Scoring is transparent: every point is visible in a
-per-rule breakdown (`+6 python_core`, `+7 bots`, `+3 budget`).
+The core is plain Python 3.8+: without dependencies it falls back to `urllib`; with
+`feedparser` and `requests` it's more robust, but they're optional. The score isn't a
+black box — every point shows up in a per-rule breakdown.
 
-**Stack.** Python 3.8+, IMAP (email alerts), feedparser + requests (optional),
-Telegram Bot API, JSON/SQLite.
-
----
-
-## Résumé site
-
-A personal résumé page: bilingual (UA/EN), dark and light themes, print to PDF.
-A single HTML file with no build step and no dependencies.
-
-| Page |
-|---|
-| ![Résumé](assets/site/resume.png) |
-
-**How it works.** Plain HTML/CSS/JS, no frameworks. Language and theme switching
-runs on CSS variables and attributes, with no reload. A separate print stylesheet
-(`@media print`) expands links and strips the chrome to print a clean PDF résumé.
-Deployed on GitHub Pages.
-
-**Stack.** HTML, CSS (custom properties), vanilla JavaScript.
+**Stack:** Python 3.8+, IMAP, feedparser + requests (optional), Telegram Bot API,
+JSON/SQLite.
