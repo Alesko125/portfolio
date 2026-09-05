@@ -100,8 +100,8 @@ on Google Play — it ships as its own APK.
 > On the account screen the account number, name, login, address and IP are blurred —
 > this is a real subscriber's data.
 
-The operator gives no API, so the app pulls the account straight off their web page —
-it parses the HTML with jsoup. The playlist and program guide come in as M3U and
+There's no access to the provider's API, so the app pulls the account straight off
+their web page — it parses the HTML with jsoup. The playlist and program guide come in as M3U and
 XMLTV, and libVLC plays the channels. Push runs through Firebase, with the token kept
 encrypted.
 
