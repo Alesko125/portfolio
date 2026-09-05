@@ -44,11 +44,9 @@ everything is done by hand and every action lands in a log you can't rewrite.
 
 Built on Next.js 15 with the App Router: pages assemble on the server, and instead of
 a separate API it uses server actions. I wrote the auth myself — server sessions you
-kill with a single query, no beta library to get tied to. Passwords run on `scrypt`
-from Node's standard library, so there's no native module to break the Alpine/Windows
-build. Anti-bot is my own Altcha instead of a captcha, no third parties. Search had to
-go on Postgres's `simple` dictionary: there's no Ukrainian stemmer, and the English
-one mangles Ukrainian words both ways.
+kill with a single query. Passwords run on `scrypt` from Node's standard library.
+Anti-bot is my own Altcha instead of a captcha, no third parties. Search runs on
+Postgres's `simple` dictionary, since there's no ready Ukrainian stemmer.
 
 **Stack:** Next.js 15, React 19, TypeScript, PostgreSQL + Prisma, Tailwind v4,
 remark/rehype, Resend, Caddy, Docker Compose.
@@ -77,9 +75,9 @@ forecast, and compare you against the industry. The hiring calculator shows whic
 cheaper — staff, Diia.City, or a contractor — for the same net pay. The calendar holds
 the due dates for your regime.
 
-The whole database sits on the phone and goes nowhere. No server means nothing to
-leak. The one time the app touches the network is for the NBU rate. Sign-in is
-biometrics or a code stored only as a hash, with no way back to the code itself.
+The whole database sits on the phone and goes nowhere. The one time the app touches
+the network is for the NBU rate. Sign-in is biometrics or a code stored only as a
+hash.
 
 **Stack:** Kotlin, Jetpack Compose, Room, WorkManager, Biometric, Google Play Billing,
 AdMob.
@@ -110,8 +108,7 @@ encrypted.
 Behind it is a Python backend (aiohttp + aiogram) that takes device registrations,
 sends push and serves the APK. There are no Google Play updates, so the channel is my
 own: `version.json` says which version is current, and the app checks the downloaded
-file against a SHA-256 before installing — so nothing else can arrive in place of an
-update.
+file against a SHA-256 before installing.
 
 **Stack:** Kotlin, Compose, jsoup, OkHttp, libVLC, Firebase Cloud Messaging,
 Security-Crypto. Backend — Python, aiohttp, aiogram, SQLite, Caddy.
@@ -189,8 +186,8 @@ SQLite — and picks payloads to match. Reports go to HTML and JSON, and next to
 `REMEDIATION.md` shows how to close the hole in Java, PHP and Node.
 
 Written in plain Python 3, no external dependency at all. It ships a deliberately
-broken little site to prove the scanner actually finds something. You can run it from
-the console, through a menu, or from a Telegram bot.
+vulnerable test site where you can see the scanner actually find something. You can
+run it from the console, through a menu, or from a Telegram bot.
 
 **Stack:** Python 3 (stdlib only), a Telegram bot on the raw Bot API.
 
@@ -212,8 +209,8 @@ job it drafts a letter on a hook → solution → call-to-action shape. Everythi
 stored in JSON or SQLite, and it runs both by commands and through a menu.
 
 The core is plain Python 3.8+: without dependencies it falls back to `urllib`; with
-`feedparser` and `requests` it's more robust, but they're optional. The score isn't a
-black box — every point shows up in a per-rule breakdown.
+`feedparser` and `requests` it's more robust, but they're optional. Every point shows
+up in a per-rule breakdown, so it's clear where a score came from.
 
 **Stack:** Python 3.8+, IMAP, feedparser + requests (optional), Telegram Bot API,
 JSON/SQLite.
