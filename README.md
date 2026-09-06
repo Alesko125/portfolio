@@ -7,7 +7,7 @@
 
 ## Що тут є
 
-| Проект | Коротко | На чому |
+| Проект | Опис | Стек |
 |---|---|---|
 | [HelpLoop](#helploop) | Q&A-спільнота для айтівців, працює | Next.js 15, React 19, TypeScript, PostgreSQL |
 | [ФОП Фінанси](#фоп-фінанси) | Облік фінансів ФОП, є в Google Play | Kotlin, Compose, Room |
