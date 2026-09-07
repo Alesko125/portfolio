@@ -20,8 +20,8 @@
 
 ## HelpLoop
 
-A place where IT people help each other: you ask what you're stuck on and answer the
-things you have solved yourself before. The interface is in Ukrainian.
+A place where IT people help each other: ask about a problem, or answer one you have
+already solved. The interface is in Ukrainian.
 
 | | | |
 |---|---|---|
@@ -45,7 +45,7 @@ remark/rehype, Resend, Caddy, Docker Compose.
 
 ## FOP Finance
 
-Calculates the finances of a Ukrainian sole proprietor: income and expenses, taxes under
+Tracks the finances of a Ukrainian sole proprietor: income and expenses, taxes under
 seven regimes, profitability, hiring and a payment calendar. Published on Google Play.
 
 | Accounting | Analytics | Hiring |
@@ -130,7 +130,7 @@ There is no backend; the app reads the sheet directly.
 
 ## fb2 library
 
-Organizes a folder of books: it determines which series and volume each file belongs to and
+Keeps a folder of books in order: it determines the series and volume for each file and
 builds archives from them. It can be managed through a Telegram Mini App, a bot or the
 console. It works only with files that are already on your device.
 
@@ -175,8 +175,8 @@ be run from the console, through a menu or from a Telegram bot.
 
 ## Upwork Copilot
 
-A set of scripts for Upwork: it collects jobs, assesses how well they fit and writes cover
-letters for them. It is tuned for Python, automation and APIs.
+A set of scripts for Upwork: it collects jobs, scores how well they fit and writes cover
+letters for them. It is built around Python, automation and APIs.
 
 | Console |
 |---|
