@@ -15,6 +15,7 @@
 | [fb2 library](#fb2-library) | Book catalog + Telegram Mini App | Python, FastAPI, aiogram |
 | [SQLi scanner](#sqli-scanner) | Check your own sites for injection | Python, stdlib only |
 | [Upwork Copilot](#upwork-copilot) | Upwork job scoring | Python, IMAP |
+| [ONU Auto Flasher](#onu-auto-flasher) | ONU firmware updates through a web interface | Python, CustomTkinter, curl |
 
 ---
 
@@ -194,3 +195,19 @@ shown in a rule-by-rule breakdown, so it is clear where it came from.
 
 **Stack:** Python 3.8+, IMAP, feedparser + requests (optional), Telegram Bot API,
 JSON/SQLite.
+
+---
+
+## ONU Auto Flasher
+
+A Windows app for updating multiple ONUs through their web interface. Enter the channels,
+login, password and target version; the app checks the device, uploads the firmware, waits
+for the reboot and checks the result.
+
+![ONU Auto Flasher main window](https://raw.githubusercontent.com/Alesko125/onu-auto-flasher/master/assets/onu-flasher-main.png)
+
+It has automatic and manual modes, parallel work with several channels, firmware file
+selection, SHA-256 verification, a retry after failure, progress reporting and a CSV log.
+Devices that are already up to date are skipped for the rest of the day.
+
+**Stack:** Python, CustomTkinter, curl.exe, Windows API.

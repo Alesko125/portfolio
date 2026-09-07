@@ -16,6 +16,7 @@
 | [Бібліотека fb2](#бібліотека-fb2) | Каталог книг + Telegram Mini App | Python, FastAPI, aiogram |
 | [SQLi-сканер](#sqli-сканер) | Перевірка своїх сайтів на ін'єкції | Python, чистий stdlib |
 | [Upwork Copilot](#upwork-copilot) | Оцінка вакансій Upwork | Python, IMAP |
+| [ONU Auto Flasher](#onu-auto-flasher) | Прошивка ONU через веб-інтерфейс | Python, CustomTkinter, curl |
 
 ---
 
@@ -180,3 +181,19 @@ MS SQL, Oracle, SQLite — і підбирає під неї пейлоади. �
 
 **Стек:** Python 3.8+, IMAP, feedparser + requests (за бажанням), Telegram Bot API,
 JSON/SQLite.
+
+---
+
+## ONU Auto Flasher
+
+Windows-застосунок для масової прошивки ONU через їхній веб-інтерфейс. Вказуєш канали,
+логін, пароль і версію — застосунок сам перевіряє пристрій, завантажує прошивку,
+чекає перезавантаження й перевіряє результат.
+
+![Головне вікно ONU Auto Flasher](https://raw.githubusercontent.com/Alesko125/onu-auto-flasher/master/assets/onu-flasher-main.png)
+
+Є автоматичний і ручний режими, паралельна робота з кількома каналами, вибір файлу
+прошивки, перевірка SHA-256, повторна спроба після збою, прогрес і CSV-лог. Повторно
+актуальні пристрої в той самий день не прошиває.
+
+**Стек:** Python, CustomTkinter, curl.exe, Windows API.
